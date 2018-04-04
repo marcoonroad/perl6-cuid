@@ -31,6 +31,7 @@ sub counter {
         });
 }
 
+# TODO: must improve that hashing function
 sub digest($text) { $text.ords.sum / ($text.chars + 1) }
 
 sub fingerprint {
