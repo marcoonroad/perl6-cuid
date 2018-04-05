@@ -1,7 +1,7 @@
 unit module CUID;
 
 my $counter-lock = Lock.new;
-my $maximum      = 1679616;
+my $maximum      = 16 ** 4;
 
 my @text-inputs = @(
         $*CWD.Str,  $*KERNEL.Str, $*DISTRO.Str,
@@ -34,13 +34,13 @@ sub counter {
 # TODO: must improve that hashing function
 sub digest($text) { $text.ords.sum / ($text.chars + 1) }
 
-sub fingerprint {
-        @text-inputs
+my $fingerprint = (@text-inputs
         ==> map(&digest)
         ==> sum()
         ==> to-hexadecimal()
-        ==> padding-by4()
-}
+        ==> padding-by4());
+
+sub fingerprint { $fingerprint }
 
 sub random-block {
         $maximum.rand.Int

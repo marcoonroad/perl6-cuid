@@ -30,6 +30,12 @@ Inside this root directory project, just type:
 $ zef --force install .
 ```
 
+As an alternative, you could type as well:
+
+```shell
+$ make install
+```
+
 ### Usage
 
 ```perl6
