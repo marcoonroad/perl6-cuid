@@ -22,6 +22,10 @@ generating CUIDs offline without any problem.
 
 For more information, see: http://usecuid.org
 
+### Important Notes
+
+> This library is thread-safe regarding internal state counter.
+
 ### Installation
 
 Inside this root directory project, just type:

@@ -9,14 +9,15 @@ my @text-inputs = @(
         $*USER.Str, $*PID.Str,    $*HOME.Str
 );
 
-sub to-hexadecimal($number) { "%08s".sprintf($number.base($base).lc) }
-
+sub to-base36($number) { $number.base($base).lc }
+sub adjust-by8($text)  { "%08s".sprintf($text) }
 sub padding-by4($text) { $text.substr(*-4) }
 sub padding-by8($text) { $text.substr(*-8) }
 
 sub timestamp {
         (now.round(0.01) * 100)
-        ==> to-hexadecimal()
+        ==> to-base36()
+        ==> adjust-by8()
         ==> padding-by8()
 }
 
@@ -26,10 +27,11 @@ sub counter {
         $counter-lock.protect({
                 $counter = $counter < $maximum ?? $counter !! 0;
 
-                $counter++
-                ==> to-hexadecimal()
-                ==> padding-by4();
-        });
+                $counter++;
+        })
+        ==> to-base36()
+        ==> adjust-by8()
+        ==> padding-by4();
 }
 
 # TODO: must improve that hashing function
@@ -38,14 +40,16 @@ sub digest($text) { $text.ords.sum / ($text.chars + 1) }
 my $fingerprint = (@text-inputs
         ==> map(&digest)
         ==> sum()
-        ==> to-hexadecimal()
+        ==> to-base36()
+        ==> adjust-by8()
         ==> padding-by4());
 
 sub fingerprint { $fingerprint }
 
 sub random-block {
         $maximum.rand.Int
-        ==> to-hexadecimal()
+        ==> to-base36()
+        ==> adjust-by8()
         ==> padding-by4()
 }
 
