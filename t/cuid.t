@@ -2,23 +2,23 @@ use v6.c;
 use Test;
 use lib 'lib';
 
-plan 3;
+plan 4;
 
-subtest "CUID field specification" => sub {
+subtest "CUID field specification -" => sub {
         use CUID :internals;
 
         plan 5;
 
         my %fields = fields( );
 
-        is %fields<prefix>.chars,      1, "prefix length";
-        is %fields<timestamp>.chars,   8, "timestamp length";
-        is %fields<counter>.chars,     4, "counter length";
-        is %fields<fingerprint>.chars, 4, "fingerprint length";
-        is %fields<random>.chars,      8, "random length";
+        is %fields<prefix>.chars,      1, "cuid prefix length";
+        is %fields<timestamp>.chars,   8, "cuid timestamp length";
+        is %fields<counter>.chars,     4, "cuid counter length";
+        is %fields<fingerprint>.chars, 4, "cuid fingerprint length";
+        is %fields<random>.chars,      8, "cuid random length";
 };
 
-subtest "CUID valid characters" => sub {
+subtest "CUID valid characters -" => sub {
         use CUID;
 
         plan 2;
@@ -26,10 +26,21 @@ subtest "CUID valid characters" => sub {
         my $cuid = generate( );
 
         is $cuid.chars, 25, "cuid length";
-        like $cuid, /<[a .. f 0 .. 9]>+/, "cuid hexadecimal characters";
+        like $cuid, rx:r/<[a .. z 0 .. 9]>+/, "cuid base-36 characters";
 };
 
-subtest "CUID collisions" => sub {
+subtest "CUID slugs -" => sub {
+        use CUID;
+
+        plan 2;
+
+        my $cuid-slug = slug( );
+
+        is $cuid-slug.chars, 8, "cuid slug length";
+        like $cuid-slug, rx:r/<[a .. z 0 .. 9]>+/, "cuid slug characters";
+};
+
+subtest "CUID collisions -" => sub {
         use CUID;
 
         plan 1;
@@ -61,7 +72,7 @@ subtest "CUID collisions" => sub {
                 last unless $result;
         }
 
-        nok $collision, "collision detection";
+        nok $collision, "cuid collision detection";
 };
 
 done-testing;

@@ -9,7 +9,7 @@ my @text-inputs = @(
         $*USER.Str, $*PID.Str,    $*HOME.Str
 );
 
-sub to-hexadecimal($number) { "%08s".sprintf($number.base($base)) }
+sub to-hexadecimal($number) { "%08s".sprintf($number.base($base).lc) }
 
 sub padding-by4($text) { $text.substr(*-4) }
 sub padding-by8($text) { $text.substr(*-8) }
@@ -61,6 +61,16 @@ sub generate is export {
         'c' ~
         timestamp() ~ counter() ~ fingerprint() ~
         random-block() ~ random-block()
+}
+
+sub slug is export {
+        my %fields = fields();
+
+        %fields<timestamp>.substr(*-2) ~
+        %fields<counter>.substr(*-2) ~
+        %fields<fingerprint>.substr(0, 1) ~
+        %fields<fingerprint>.substr(*-1) ~
+        %fields<random>.substr(*-2);
 }
 
 # END
