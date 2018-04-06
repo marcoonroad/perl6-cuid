@@ -49,7 +49,7 @@ sub random-block {
         ==> padding-by4()
 }
 
-sub fields is export(:internals) {
+sub cuid-fields is export(:internals) {
         %(prefix    => 'c',
         timestamp   => timestamp(),
         counter     => counter(),
@@ -57,14 +57,14 @@ sub fields is export(:internals) {
         random      => random-block() ~ random-block())
 }
 
-sub generate is export {
+sub cuid is export {
         'c' ~
         timestamp() ~ counter() ~ fingerprint() ~
         random-block() ~ random-block()
 }
 
-sub slug is export {
-        my %fields = fields();
+sub cuid-slug is export {
+        my %fields = cuid-fields();
 
         %fields<timestamp>.substr(*-2) ~
         %fields<counter>.substr(*-2) ~

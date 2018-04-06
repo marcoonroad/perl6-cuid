@@ -9,7 +9,7 @@ subtest "CUID field specification -" => sub {
 
         plan 5;
 
-        my %fields = fields( );
+        my %fields = cuid-fields( );
 
         is %fields<prefix>.chars,      1, "cuid prefix length";
         is %fields<timestamp>.chars,   8, "cuid timestamp length";
@@ -23,10 +23,10 @@ subtest "CUID valid characters -" => sub {
 
         plan 2;
 
-        my $cuid = generate( );
+        my $cuid = cuid( );
 
         is $cuid.chars, 25, "cuid length";
-        like $cuid, rx:r/<[a .. z 0 .. 9]>+/, "cuid base-36 characters";
+        like $cuid, rx:r/^ <[a .. z 0 .. 9]>+ $/, "cuid base-36 characters";
 };
 
 subtest "CUID slugs -" => sub {
@@ -34,10 +34,10 @@ subtest "CUID slugs -" => sub {
 
         plan 2;
 
-        my $cuid-slug = slug( );
+        my $cuid-slug = cuid-slug( );
 
         is $cuid-slug.chars, 8, "cuid slug length";
-        like $cuid-slug, rx:r/<[a .. z 0 .. 9]>+/, "cuid slug characters";
+        like $cuid-slug, rx:r/^ <[a .. z 0 .. 9]>+ $/, "cuid slug characters";
 };
 
 subtest "CUID collisions -" => sub {
@@ -54,7 +54,7 @@ subtest "CUID collisions -" => sub {
         loop (my $index = 1; $index < $ITERATIONS; $index++) {
                 my $result = [&&] await((^$THREADS).map: {
                         start {
-                                my $cuid = generate( );
+                                my $cuid = cuid( );
 
                                 $lock.protect: {
                                         if $cuids{$cuid} {

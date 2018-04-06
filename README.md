@@ -38,22 +38,22 @@ $ make install
 
 ### Usage
 
-To generate full CUIDs, use the `generate` function:
+To generate full CUIDs, use the `cuid` function:
 
 ```perl6
 use CUID;
 
-my $cuid = generate( );
+my $cuid = cuid( );
 
 $cuid.say; # ===> c1xyr5kms0000qb8qtlakvjsj
 ```
 
-For slugs (short and weak CUIDs), use the following `slug` function:
+For slugs (short and weak CUIDs), use the following `cuid-slug` function:
 
 ```perl6
 use CUID;
 
-my $cuid-slug = slug( );
+my $cuid-slug = cuid-slug( );
 
 $cuid-slug.say; # ===> f900qqno
 ```
