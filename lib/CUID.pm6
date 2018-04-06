@@ -1,14 +1,15 @@
 unit module CUID;
 
+my $base         = 36;
 my $counter-lock = Lock.new;
-my $maximum      = 16 ** 4;
+my $maximum      = $base ** 4;
 
 my @text-inputs = @(
         $*CWD.Str,  $*KERNEL.Str, $*DISTRO.Str,
         $*USER.Str, $*PID.Str,    $*HOME.Str
 );
 
-sub to-hexadecimal($number) { "%08x".sprintf($number) }
+sub to-hexadecimal($number) { "%08s".sprintf($number.base($base)) }
 
 sub padding-by4($text) { $text.substr(*-4) }
 sub padding-by8($text) { $text.substr(*-8) }
